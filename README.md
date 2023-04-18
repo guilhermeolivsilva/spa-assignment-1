@@ -8,9 +8,16 @@ Henrique F. Scheid - ...
 
 ## Environment
 
-LLVM version 16.0.1
+Dependencies:
+
+* LLVM 16.0.1
+* CMake 3.26.3
 
 Tested with
 
-* macOS Ventura 13.2.1
+* macOS Ventura 13.2.1 (Apple M1)
 * ...
+
+## Setup
+
+...
