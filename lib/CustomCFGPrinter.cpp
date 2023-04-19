@@ -1,6 +1,8 @@
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Instruction.h"
 
 using namespace llvm;
 
@@ -9,7 +11,13 @@ namespace {
     // This method implements what the pass does
     void foo(Function &F) {
         // This will print "its alive" once for each function present in the target .ll file
-        errs() << "its alive!\n";
+        errs() << "instructions in this function:\n";
+        for (BasicBlock &BB : F) {
+            errs() << "Basic block: " << BB.getName() << "\n";
+            for (Instruction &I : BB) {
+                errs() << I << "\n";
+            }
+        }
     }
 
     // New PM implementation
