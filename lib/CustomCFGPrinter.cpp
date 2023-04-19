@@ -14,8 +14,8 @@ namespace {
     void foo(Function &F) {
         // This will print "its alive" once for each function present in the target .ll file
         std::error_code EC;
-        raw_fd_ostream File("output.txt", EC, sys::fs::OF_Text);
-        File << "instructions in this function:\n";
+        raw_fd_ostream File("output.txt", EC, sys::fs::OF_Append);
+        File << "instructions in this function: " << F.getName() << "\n";
         for (BasicBlock &BB : F) {
             File << "Basic block: " << BB.getName() << "\n";
             for (Instruction &I : BB) {
