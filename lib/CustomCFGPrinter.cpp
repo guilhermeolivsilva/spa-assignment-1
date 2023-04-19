@@ -12,14 +12,14 @@ using namespace llvm;
 namespace {
     // This method implements what the pass does
     void foo(Function &F) {
-        // This will print "its alive" once for each function present in the target .ll file
+        // To do: name all basic blocks once one is found.
         std::error_code EC;
         raw_fd_ostream File("output.txt", EC, sys::fs::OF_Append);
         File << "instructions in this function: " << F.getName() << "\n";
         for (BasicBlock &BB : F) {
-            File << "Basic block: " << BB.getName() << "\n";
+            File << "Basic block: \n";
             for (Instruction &I : BB) {
-                File << I << "\n";
+            // To do: if instruction is "br", get its successor's name
             }
         }
     }
