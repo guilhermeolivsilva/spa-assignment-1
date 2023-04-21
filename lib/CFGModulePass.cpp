@@ -36,20 +36,31 @@ namespace {
 
     void CFGModulePass::linkBBs(Module &M) {
         std::error_code EC;
-        raw_fd_ostream File("output.txt", EC, sys::fs::OF_Append);
+        raw_fd_ostream File("output.dot", EC, sys::fs::OF_Append);
+        File << "digraph CFG {\n";
         for (Function &F : M) {
-            File << "Function name: " << F.getName() << "\n";
+//            File << "Function name: " << F.getName() << "\n";
             for (BasicBlock &BB : F) {
-                File << "Basic block: " << BB.getName() << "\n";
+//                File << "Basic block: " << BB.getName() << "\n";
+                  File << "\t" << BB.getName()
+                       << "[shape=record,\n\t\tlabel=\"{" << BB.getName()
+                       << ":\\l\\l";
                 for (Instruction &I : BB) {
-                    File << I << "\n";
+                    File << "\n\t\t\t" << I << "\\l";
                     if (auto* brInst = dyn_cast<BranchInst>(&I)) {
                         BasicBlock* targetBB = brInst->getSuccessor(0);
-                        File << "Points to: " << targetBB->getName() << "\n";
+                        File << "}\"];\n";
+                        File << "\t" << BB.getName()
+                             << " -> " << targetBB->getName() << ";\n";
+//                        File << "Points to: " << targetBB->getName() << "\n";
+                    }
+                    if (auto* retInst = dyn_cast<ReturnInst>(&I)){
+                        File << "}\"];\n";
                     }
                 }
             } 
         }
+        File << "}" ;
     }
 
     PreservedAnalyses CFGModulePass::run(Module &M,
