@@ -48,10 +48,13 @@ namespace {
                 for (Instruction &I : BB) {
                     File << "\n\t\t\t" << I << "\\l";
                     if (auto* brInst = dyn_cast<BranchInst>(&I)) {
-                        BasicBlock* targetBB = brInst->getSuccessor(0);
                         File << "}\"];\n";
-                        File << "\t" << BB.getName()
-                             << " -> " << targetBB->getName() << ";\n";
+                        int succs = brInst->getNumSuccessors();
+                        for (int i=0; i < succs; ++i) {
+                            BasicBlock* targetBB = brInst->getSuccessor(i);
+                            File << "\t" << BB.getName()
+                                 << " -> " << targetBB->getName() << ";\n";
+                        }
 //                        File << "Points to: " << targetBB->getName() << "\n";
                     }
                     if (auto* retInst = dyn_cast<ReturnInst>(&I)){
