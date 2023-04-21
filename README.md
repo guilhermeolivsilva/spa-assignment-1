@@ -4,7 +4,7 @@
 
 Guilherme O. Silva - 2023671528
 
-Henrique F. Scheid - ...
+Henrique F. Scheid - 2017014898
 
 ## Environment
 
@@ -16,7 +16,7 @@ Dependencies:
 Tested with
 
 * macOS Ventura 13.2.1 (Apple M1)
-* ...
+* Ubuntu 18.04.6
 
 ## Setup
 
