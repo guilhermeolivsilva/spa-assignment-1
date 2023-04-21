@@ -5,11 +5,15 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/Support/FileSystem.h"
 #include <system_error>
+#include <string>
 
 using namespace llvm;
 
 
 namespace {
+    // Global variable to name all basic blocks.
+    // This is not thread safe.
+    int BBCounter = 0;
     // This method implements what the pass does
     void foo(Function &F) {
         // To do: name all basic blocks once one is found.
@@ -17,9 +21,16 @@ namespace {
         raw_fd_ostream File("output.txt", EC, sys::fs::OF_Append);
         File << "instructions in this function: " << F.getName() << "\n";
         for (BasicBlock &BB : F) {
-            File << "Basic block: \n";
+            BB.setName("BB"+std::to_string(BBCounter));
+            ++BBCounter;
+            File << "Basic block: " << BB.getName() << "\n";
             for (Instruction &I : BB) {
-            // To do: if instruction is "br", get its successor's name
+                // To do: if instruction is "br", get its successor's name
+                File << I << "\n";
+                if (auto* brInst = dyn_cast<BranchInst>(&I)) {
+                    BasicBlock* targetBB = brInst->getSuccessor(0);
+                    File << "Points to: " << targetBB->getName() << "\n";
+                }
             }
         }
     }
