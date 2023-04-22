@@ -28,16 +28,31 @@ Tested with
 export LLVM_PATH=/path/to/llvm
 ```
 
+example:
+```
+export LLVM_PATH=/home/linuxbrew/.linuxbrew/bin
+```
+
 2. `CLANG_PATH`
 
 ```
 export CLANG_PATH=/path/to/clang/callable
 ```
 
+example:
+```
+export CLANG_PATH=/home/linuxbrew/.linuxbrew/bin/clang
+```
+
 3. `OPT_PATH`
 
 ```
-export LLVM_PATH=/path/to/opt/callable
+export OPT_PATH=/path/to/opt/callable
+```
+
+example:
+```
+export OPT_PATH=/home/linuxbrew/.linuxbrew/bin/opt
 ```
 
 4. `LIB_EXTENSION`
