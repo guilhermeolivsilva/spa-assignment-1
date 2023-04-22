@@ -31,7 +31,6 @@ endif()
 #===============================================================================
 # 3. ADD THE TARGET
 #===============================================================================
-add_library(CustomCFGPrinter SHARED CustomCFGPrinter.cpp)
 add_library(CFGModulePass SHARED CFGModulePass.cpp)
 
 # Allow undefined symbols in shared objects on Darwin (this is the default
