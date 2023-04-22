@@ -7,6 +7,7 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/Pass.h"
+#include <regex>
 #include <system_error>
 #include <string>
 
@@ -18,8 +19,7 @@ namespace {
     int BBCounter = 0;
 
     struct CFGModulePass : public PassInfoMixin<CFGModulePass> {
-        PreservedAnalyses run(Module &M,
-                                    ModuleAnalysisManager &);
+        PreservedAnalyses run(Module &M, ModuleAnalysisManager &);
         void nameBBs(Module &M);
         void linkBBs(Module &M);
         static bool isRequired() { return true; }
@@ -35,13 +35,15 @@ namespace {
     }
 
     void CFGModulePass::linkBBs(Module &M) {
+        std::regex pattern("(benchmarks\\/Stanford\\/|\\.c)");
+        std::string fileName = std::regex_replace(M.getSourceFileName(), pattern, "");
+        fileName += ".dot";
+
         std::error_code EC;
-        raw_fd_ostream File("output.dot", EC, sys::fs::OF_Append);
+        raw_fd_ostream File(fileName, EC, sys::fs::OF_Append);
         File << "digraph CFG {\n";
         for (Function &F : M) {
-//            File << "Function name: " << F.getName() << "\n";
             for (BasicBlock &BB : F) {
-//                File << "Basic block: " << BB.getName() << "\n";
                   File << "\t" << BB.getName()
                        << "[shape=record,\n\t\tlabel=\"{" << BB.getName()
                        << ":\\l\\l";
@@ -55,7 +57,6 @@ namespace {
                             File << "\t" << BB.getName()
                                  << " -> " << targetBB->getName() << ";\n";
                         }
-//                        File << "Points to: " << targetBB->getName() << "\n";
                     }
                     if (auto* retInst = dyn_cast<ReturnInst>(&I)){
                         File << "}\"];\n";
@@ -63,7 +64,8 @@ namespace {
                 }
             } 
         }
-        File << "}" ;
+        File << "}";
+        File.close();
     }
 
     PreservedAnalyses CFGModulePass::run(Module &M,
